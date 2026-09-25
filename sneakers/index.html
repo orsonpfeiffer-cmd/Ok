@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Loam Sneakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #EAEFE9;
+    --surface: #F6F8F4;
+    --label-bg: #FFFFFF;
+    --ink: #16241C;
+    --muted: #56655B;
+    --line: #C6D1C8;
+    --accent: #2B55C9;
+    --accent-ink: #FFFFFF;
+    --amber: #B87A14;
+    --shadow: rgba(22, 36, 28, 0.14);
+    --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101813;
+      --surface: #17211B;
+      --label-bg: #1B271F;
+      --ink: #E3EAE2;
+      --muted: #9AAA9F;
+      --line: #2D3B32;
+      --accent: #8CA7FF;
+      --accent-ink: #0E1A40;
+      --amber: #E2AE52;
+      --shadow: rgba(0, 0, 0, 0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101813;
+    --surface: #17211B;
+    --label-bg: #1B271F;
+    --ink: #E3EAE2;
+    --muted: #9AAA9F;
+    --line: #2D3B32;
+    --accent: #8CA7FF;
+    --accent-ink: #0E1A40;
+    --amber: #E2AE52;
+    --shadow: rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+  @media (max-width: 480px) { .wrap { padding-inline: 16px; } }
+
+  h1, h2, h3 { font-family: var(--display); line-height: 1.02; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.6rem, 6.4vw, 5.2rem); font-weight: 800; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 800; letter-spacing: -0.02em; }
+  h3 { font-size: 1.45rem; font-weight: 600; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--muted);
+  }
+  .lede { font-size: 1.15rem; color: var(--muted); max-width: 34rem; }
+
+  /* Nav */
+  .nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+  .brand { font-family: var(--display); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.04em; text-decoration: none; }
+  .brand span { color: var(--accent); }
+  .nav ul { list-style: none; display: flex; gap: 24px; margin: 0; padding: 0; font-size: 0.95rem; }
+  .nav ul a { text-decoration: none; color: var(--muted); }
+  .nav ul a:hover { color: var(--ink); }
+  @media (max-width: 640px) { .nav ul { display: none; } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px; border-radius: 999px; font: 600 1rem var(--body);
+    text-decoration: none; border: 1.5px solid var(--ink); cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+
+  section { padding-block: 88px; }
+  @media (max-width: 640px) { section { padding-block: 60px; } }
+  .section-head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 44rem; }
+
+  /* Hero */
+  .hero { padding-block: 64px 88px; }
+  .hero-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: center; }
+  @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .hero-copy { display: grid; gap: 24px; }
+  .hero h1 .num { color: var(--accent); }
+  .hero h1 .strike { text-decoration: line-through; text-decoration-thickness: 0.08em; color: var(--muted); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .hero-shoe { margin-top: 8px; max-width: 460px; }
+
+  /* Carbon facts label */
+  .label {
+    background: var(--label-bg); color: var(--ink);
+    border: 2px solid var(--ink); padding: 18px 20px 16px;
+    font-family: var(--body); box-shadow: 10px 10px 0 var(--line);
+    max-width: 420px; width: 100%; justify-self: end;
+  }
+  @media (max-width: 880px) { .label { justify-self: start; } }
+  .label h2 { font-size: 2.1rem; letter-spacing: -0.02em; }
+  .label .sub { font-size: 0.9rem; color: var(--muted); margin-top: 2px; }
+  .rule-thick { height: 10px; background: var(--ink); margin: 10px 0 8px; }
+  .rule-mid { height: 4px; background: var(--ink); margin: 8px 0; }
+  .label-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .label-total strong { font-family: var(--display); font-size: 1.25rem; }
+  .label-total .big { white-space: nowrap; font-family: var(--display); font-weight: 800; font-size: 2.4rem; font-variant-numeric: tabular-nums; }
+  .label-total .big small { font-size: 1rem; font-weight: 600; }
+  .label table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+  .label td { padding: 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+  .label tr:first-child td { border-top: 0; }
+  .label td.kg { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+  .label td .what { color: var(--muted); font-size: 0.82rem; display: block; }
+  .label .foot { font-size: 0.78rem; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+
+  /* Shoe svg colors */
+  .shoe { display: block; width: 100%; height: auto; }
+  .upper { fill: var(--c-upper, #D9D2BF); }
+  .toe, .heel { fill: var(--c-trim, #4A6B4F); }
+  .sole { fill: var(--c-sole, #F2EEE4); }
+  .sole-line { fill: none; stroke: var(--c-trim, #4A6B4F); stroke-width: 2; }
+  .lace { stroke: var(--c-lace, #FFFFFF); stroke-width: 3.5; stroke-linecap: round; }
+  .outline { fill: none; stroke: #1A241E; stroke-width: 2.2; stroke-linejoin: round; }
+  .ground { fill: var(--shadow); }
+
+  /* Lineup */
+  .lineup { background: var(--surface); border-block: 1px solid var(--line); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 920px) { .cards { grid-template-columns: 1fr; max-width: 520px; } }
+  .card {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 18px;
+    padding: 22px; display: grid; gap: 14px; grid-template-rows: auto auto auto 1fr auto;
+  }
+  .card .stage { background: var(--surface); border-radius: 12px; padding: 18px 10px 8px; }
+  .card .stage svg { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+  .card:hover .stage svg { transform: translateY(-6px) rotate(-2deg); }
+  .card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .price { font-family: var(--mono); font-size: 1rem; }
+  .card p.desc { color: var(--muted); font-size: 0.97rem; }
+  .card-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .kg-chip {
+    font-family: var(--mono); font-size: 0.82rem; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); font-variant-numeric: tabular-nums;
+  }
+  .swatches { display: flex; gap: 8px; align-items: center; }
+  .swatch {
+    width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--line); cursor: pointer; padding: 0;
+  }
+  .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+  .colorway-name { font-size: 0.85rem; color: var(--muted); }
+
+  /* Materials */
+  .materials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 2px solid var(--ink); }
+  @media (max-width: 1000px) { .materials-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .materials-grid { grid-template-columns: 1fr; } }
+  .mat { padding: 24px 22px 28px 0; display: grid; gap: 10px; align-content: start; border-bottom: 1px solid var(--line); }
+  .mat + .mat { padding-left: 22px; border-left: 1px solid var(--line); }
+  @media (max-width: 1000px) {
+    .mat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  }
+  @media (max-width: 560px) {
+    .mat, .mat + .mat { border-left: 0; padding-left: 0; }
+  }
+  .mat .part { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); }
+  .mat p { color: var(--muted); font-size: 0.97rem; }
+
+  .compare { margin-top: 56px; display: grid; gap: 18px; max-width: 760px; }
+  .bar-row { display: grid; grid-template-columns: 170px 1fr; gap: 16px; align-items: center; }
+  @media (max-width: 560px) { .bar-row { grid-template-columns: 1fr; gap: 6px; } }
+  .bar-row .who { font-weight: 600; font-size: 0.97rem; }
+  .bar-row .who small { display: block; font-weight: 400; color: var(--muted); font-size: 0.82rem; }
+  .bar-track { position: relative; height: 38px; }
+  .bar {
+    height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end;
+    padding-inline: 12px; font-family: var(--mono); font-size: 0.9rem; font-variant-numeric: tabular-nums;
+    transform-origin: left center;
+  }
+  .bar.ours { background: var(--accent); color: var(--accent-ink); }
+  .bar.theirs { background: var(--line); color: var(--ink); }
+  .compare .note { font-size: 0.82rem; color: var(--muted); }
+  @media (prefers-reduced-motion: no-preference) {
+    .bar { animation: grow .9s cubic-bezier(.2,.8,.2,1) both; }
+    .bar.theirs { animation-delay: .15s; }
+  }
+  @keyframes grow { from { transform: scaleX(0.15); } to { transform: scaleX(1); } }
+
+  /* Take-back */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: step; }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+  .steps li { counter-increment: step; display: grid; gap: 10px; align-content: start; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .steps li::before {
+    content: "Step " counter(step); font-family: var(--mono); font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  }
+  .steps p { color: var(--muted); }
+
+  /* Size finder */
+  .sizing { background: var(--surface); border-block: 1px solid var(--line); }
+  .sizing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  @media (max-width: 820px) { .sizing-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .finder { background: var(--bg); border: 1px solid var(--line); border-radius: 18px; padding: 26px; display: grid; gap: 20px; }
+  .finder label { font-weight: 600; display: flex; justify-content: space-between; gap: 12px; }
+  .finder label output { font-family: var(--mono); font-weight: 500; }
+  .finder input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .size-box { border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; background: var(--surface); }
+  .size-box .sys { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  .size-box .val { font-family: var(--display); font-weight: 800; font-size: 2rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .finder .hint { font-size: 0.85rem; color: var(--muted); }
+
+  /* FAQ */
+  .faq { display: grid; gap: 0; max-width: 780px; border-top: 1px solid var(--line); }
+  .faq details { border-bottom: 1px solid var(--line); padding-block: 18px; }
+  .faq summary { cursor: pointer; font-weight: 600; font-size: 1.08rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--mono); color: var(--accent); }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { color: var(--muted); margin-top: 10px; max-width: 65ch; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 36px; font-size: 0.9rem; color: var(--muted); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="shoe" viewBox="0 0 320 140">
+      <ellipse class="ground" cx="162" cy="130" rx="146" ry="7"></ellipse>
+      <path class="upper" d="M24 100 L22 46 C22 35 30 30 41 32 L80 40 C94 42 102 36 112 29 L128 21 C137 17 143 22 146 30 C154 52 182 60 222 68 L270 78 C292 83 304 92 304 102 Z"></path>
+      <path class="heel" d="M22 46 C22 35 30 30 41 32 L46 33 L46 100 L24 100 Z"></path>
+      <path class="toe" d="M252 74 L270 78 C292 83 304 92 304 102 L244 102 C238 92 242 80 252 74 Z"></path>
+      <line class="lace" x1="150" y1="40" x2="140" y2="52"></line>
+      <line class="lace" x1="164" y1="48" x2="152" y2="60"></line>
+      <line class="lace" x1="179" y1="54" x2="166" y2="66"></line>
+      <line class="lace" x1="194" y1="59" x2="181" y2="71"></line>
+      <path class="sole" d="M14 108 C14 99 20 98 28 98 L292 101 C306 101 310 106 310 113 C310 121 304 125 294 125 L30 125 C18 125 14 118 14 108 Z"></path>
+      <path class="sole-line" d="M22 113 L302 114"></path>
+      <path class="outline" d="M24 100 L22 46 C22 35 30 30 41 32 L80 40 C94 42 102 36 112 29 L128 21 C137 17 143 22 146 30 C154 52 182 60 222 68 L270 78 C292 83 304 92 304 102"></path>
+      <path class="outline" d="M14 108 C14 99 20 98 28 98 L292 101 C306 101 310 106 310 113 C310 121 304 125 294 125 L30 125 C18 125 14 118 14 108 Z"></path>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">loam<span>.</span></a>
+    <ul>
+      <li><a href="#shoes">Shoes</a></li>
+      <li><a href="#materials">Materials</a></li>
+      <li><a href="#take-back">Take-back</a></li>
+      <li><a href="#sizing">Sizing</a></li>
+    </ul>
+    <a class="btn btn-primary" href="#shoes">Shop</a>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Hemp · cork · natural rubber</p>
+        <h1>Sneakers that cost the planet <span class="num">5.9&nbsp;kg</span>, not <span class="strike">14</span>.</h1>
+        <p class="lede">Every pair of Loams comes with its full carbon bill printed on the box. Plant-based materials, a solar-powered factory in Portugal, and a take-back program so your old pair becomes someone's new sole.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#shoes">See the lineup</a>
+          <a class="btn btn-ghost" href="#materials">What's in them</a>
+        </div>
+        <svg class="shoe hero-shoe" style="--c-upper:#D9D2BF;--c-trim:#4A6B4F;--c-sole:#F2EEE4;--c-lace:#FFFFFF" role="img" aria-label="Side view of a Loam sneaker"><use href="#shoe"></use></svg>
+      </div>
+
+      <aside class="label" aria-label="Carbon facts for one pair of Loam Field sneakers">
+        <h2>Carbon Facts</h2>
+        <p class="sub">Loam Field · 1 pair · EU 42</p>
+        <div class="rule-thick"></div>
+        <div class="label-total">
+          <strong>Total footprint</strong>
+          <span class="big">5.9 <small>kg CO₂e</small></span>
+        </div>
+        <div class="rule-mid"></div>
+        <table>
+          <tbody>
+            <tr><td>Upper<span class="what">Hemp canvas, organic cotton lining</span></td><td class="kg">1.2 kg</td></tr>
+            <tr><td>Sole<span class="what">Natural rubber + sugarcane foam</span></td><td class="kg">1.9 kg</td></tr>
+            <tr><td>Insole<span class="what">Cork + natural latex</span></td><td class="kg">0.3 kg</td></tr>
+            <tr><td>Laces<span class="what">Recycled PET bottles</span></td><td class="kg">0.1 kg</td></tr>
+            <tr><td>Making it<span class="what">Solar-powered factory, Porto</span></td><td class="kg">1.4 kg</td></tr>
+            <tr><td>Getting it to you<span class="what">Sea freight + rail</span></td><td class="kg">0.6 kg</td></tr>
+            <tr><td>Box<span class="what">Recycled card, no plastic</span></td><td class="kg">0.4 kg</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-mid"></div>
+        <p class="foot">CO₂e = carbon dioxide equivalent. A typical synthetic running shoe comes in around 14 kg CO₂e (MIT life-cycle study, 2013).</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="lineup" id="shoes">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The lineup</p>
+        <h2>Three shoes. No limited drops. No hype.</h2>
+        <p class="lede">We make fewer styles and keep them in production for years, so you can replace a pair without it going out of stock.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card" data-card>
+          <div class="stage">
+            <svg class="shoe" style="--c-upper:#D9D2BF;--c-trim:#4A6B4F;--c-sole:#F2EEE4;--c-lace:#FFFFFF" role="img" aria-label="Loam Field sneaker"><use href="#shoe"></use></svg>
+          </div>
+          <div class="card-top"><h3>Field</h3><span class="price">€129</span></div>
+          <p class="colorway-name" data-name>Oat / Moss</p>
+          <p class="desc">The everyday low-top. Hemp canvas that softens with wear and a cupsole you can resole twice.</p>
+          <div class="card-meta">
+            <div class="swatches" role="group" aria-label="Field colorways">
+              <button class="swatch" aria-pressed="true" aria-label="Oat and moss" style="background:#D9D2BF" data-name="Oat / Moss" data-upper="#D9D2BF" data-trim="#4A6B4F" data-sole="#F2EEE4" data-lace="#FFFFFF"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Charcoal" style="background:#3A3F3B" data-name="Charcoal / Gum" data-upper="#3A3F3B" data-trim="#1F2320" data-sole="#C79A5B" data-lace="#E9E6DD"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Chalk" style="background:#F4F2EC" data-name="Chalk / Cobalt" data-upper="#F4F2EC" data-trim="#2B55C9" data-sole="#FFFFFF" data-lace="#2B55C9"></button>
+            </div>
+            <span class="kg-chip">5.9 kg CO₂e</span>
+          </div>
+        </article>
+
+        <article class="card" data-card>
+          <div class="stage">
+            <svg class="shoe" style="--c-upper:#6F7E4E;--c-trim:#2E3A24;--c-sole:#A87B45;--c-lace:#E8E1CF" role="img" aria-label="Loam Canopy trail sneaker"><use href="#shoe"></use></svg>
+          </div>
+          <div class="card-top"><h3>Canopy</h3><span class="price">€149</span></div>
+          <p class="colorway-name" data-name>Fern / Bark</p>
+          <p class="desc">Built for trails. Grippy natural-rubber lugs, a waxed hemp upper, and a toe cap that shrugs off rocks.</p>
+          <div class="card-meta">
+            <div class="swatches" role="group" aria-label="Canopy colorways">
+              <button class="swatch" aria-pressed="true" aria-label="Fern and bark" style="background:#6F7E4E" data-name="Fern / Bark" data-upper="#6F7E4E" data-trim="#2E3A24" data-sole="#A87B45" data-lace="#E8E1CF"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Clay" style="background:#B8704A" data-name="Clay / Stone" data-upper="#B8704A" data-trim="#5A3524" data-sole="#D8D2C4" data-lace="#F3EEE3"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Slate" style="background:#55636E" data-name="Slate / Amber" data-upper="#55636E" data-trim="#2A333A" data-sole="#D9A441" data-lace="#EDEDED"></button>
+            </div>
+            <span class="kg-chip">6.8 kg CO₂e</span>
+          </div>
+        </article>
+
+        <article class="card" data-card>
+          <div class="stage">
+            <svg class="shoe" style="--c-upper:#A9C1D6;--c-trim:#2B55C9;--c-sole:#FFFFFF;--c-lace:#FFFFFF" role="img" aria-label="Loam Low Tide sneaker"><use href="#shoe"></use></svg>
+          </div>
+          <div class="card-top"><h3>Low Tide</h3><span class="price">€109</span></div>
+          <p class="colorway-name" data-name>Sea Glass / Cobalt</p>
+          <p class="desc">Our lightest pair. A knit upper spun from ocean-bound plastic, and a cork footbed that molds to your foot.</p>
+          <div class="card-meta">
+            <div class="swatches" role="group" aria-label="Low Tide colorways">
+              <button class="swatch" aria-pressed="true" aria-label="Sea glass and cobalt" style="background:#A9C1D6" data-name="Sea Glass / Cobalt" data-upper="#A9C1D6" data-trim="#2B55C9" data-sole="#FFFFFF" data-lace="#FFFFFF"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Sand" style="background:#E3D3B4" data-name="Sand / Driftwood" data-upper="#E3D3B4" data-trim="#8C6D48" data-sole="#F7F3EA" data-lace="#FFFFFF"></button>
+              <button class="swatch" aria-pressed="false" aria-label="Kelp" style="background:#2F4A3F" data-name="Kelp / Foam" data-upper="#2F4A3F" data-trim="#16261F" data-sole="#EEF2EC" data-lace="#EEF2EC"></button>
+            </div>
+            <span class="kg-chip">4.7 kg CO₂e</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="materials">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What's in them</p>
+        <h2>Grown, not drilled.</h2>
+        <p class="lede">Most sneakers are made from oil: polyester uppers, EVA foam, synthetic rubber. We swapped each part for something that grows back.</p>
+      </div>
+
+      <div class="materials-grid">
+        <div class="mat">
+          <span class="part">Upper</span>
+          <h3>Hemp canvas</h3>
+          <p>Hemp grows fast with little water and no pesticides. The canvas is tough, breathes well, and gets softer the more you wear it.</p>
+        </div>
+        <div class="mat">
+          <span class="part">Sole</span>
+          <h3>Natural rubber</h3>
+          <p>Tapped from rubber trees on FSC-certified plantations. We blend it with sugarcane-based foam for bounce, so there's no petroleum EVA.</p>
+        </div>
+        <div class="mat">
+          <span class="part">Footbed</span>
+          <h3>Portuguese cork</h3>
+          <p>Harvested from the bark of cork oaks without cutting the tree down. It cushions, wicks moisture, and fights odor on its own.</p>
+        </div>
+        <div class="mat">
+          <span class="part">Laces &amp; thread</span>
+          <h3>Recycled PET</h3>
+          <p>Each pair of laces uses about one plastic bottle. It's the one synthetic part, because hemp laces fray too fast.</p>
+        </div>
+      </div>
+
+      <div class="compare" role="group" aria-label="Carbon footprint comparison">
+        <h3>Footprint per pair</h3>
+        <div class="bar-row">
+          <span class="who">Loam Field<small>plant-based</small></span>
+          <div class="bar-track"><div class="bar ours" style="width:42.1%">5.9 kg</div></div>
+        </div>
+        <div class="bar-row">
+          <span class="who">Typical sneaker<small>synthetic running shoe</small></span>
+          <div class="bar-track"><div class="bar theirs" style="width:100%">14 kg</div></div>
+        </div>
+        <p class="note">Bars are to scale. Typical figure from MIT's 2013 life-cycle assessment of a synthetic running shoe.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="take-back">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Take-back</p>
+        <h2>Done with them? Send them home.</h2>
+        <p class="lede">The worst part of any shoe is the landfill at the end. So we pay for the trip back and give you €20 off your next pair.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>Print a free label</h3>
+          <p>Any Loams, any condition. Holes and dog chews included. Drop the box at a post office.</p>
+        </li>
+        <li>
+          <h3>We sort and grind</h3>
+          <p>Wearable pairs get cleaned and donated. The rest is split up: rubber is ground into crumb, cork into granules, hemp into fiber.</p>
+        </li>
+        <li>
+          <h3>It becomes new soles</h3>
+          <p>Up to 30% of every new Loam sole is old Loam soles. Your €20 code lands in your inbox once the box arrives.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sizing" id="sizing">
+    <div class="wrap sizing-grid">
+      <div class="section-head" style="margin-bottom:0">
+        <p class="eyebrow">Sizing</p>
+        <h2>Find your size in ten seconds.</h2>
+        <p class="lede">Stand on a sheet of paper, mark your heel and longest toe, and measure the gap. Wrong size is the number one reason shoes get shipped back, and every return burns carbon.</p>
+      </div>
+      <div class="finder">
+        <label for="foot">Foot length <output id="foot-out" for="foot">26.5 cm</output></label>
+        <input id="foot" type="range" min="22" max="31" step="0.5" value="26.5">
+        <div class="sizes">
+          <div class="size-box"><div class="sys">EU</div><div class="val" id="eu">42</div></div>
+          <div class="size-box"><div class="sys">US men</div><div class="val" id="usm">9</div></div>
+          <div class="size-box"><div class="sys">US women</div><div class="val" id="usw">10.5</div></div>
+        </div>
+        <p class="hint">Between sizes? Go up half a size. Hemp stretches a little, but not that much.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2>The stuff people ask.</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Are they waterproof?</summary>
+          <p>Water-resistant, not waterproof. The waxed hemp on Canopy handles puddles and wet grass. None of them are for wading through rivers.</p>
+        </details>
+        <details>
+          <summary>How long do they last?</summary>
+          <p>Most people get two to three years of daily wear. Field and Canopy use stitched cupsoles, so a cobbler can resole them instead of you buying a new pair.</p>
+        </details>
+        <details>
+          <summary>Can I machine wash them?</summary>
+          <p>Take out the cork insole and laces, then wash the shoes cold on a gentle cycle. Let them air dry. The dryer will shrink the hemp.</p>
+        </details>
+        <details>
+          <summary>Are they vegan?</summary>
+          <p>Yes. No leather, no animal glue, no wool. The glue is water-based.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>loam. Sneakers with the receipt on the box.</span>
+    <span>Loam is a concept brand. Product figures are illustrative.</span>
+  </div>
+</footer>
+
+<script>
+  // Colorway swatches recolor each card's shoe
+  document.querySelectorAll('[data-card]').forEach(function (card) {
+    var svg = card.querySelector('.shoe');
+    var nameEl = card.querySelector('p[data-name]');
+    var swatches = card.querySelectorAll('.swatch');
+    swatches.forEach(function (sw) {
+      sw.addEventListener('click', function () {
+        swatches.forEach(function (s) { s.setAttribute('aria-pressed', 'false'); });
+        sw.setAttribute('aria-pressed', 'true');
+        svg.style.setProperty('--c-upper', sw.dataset.upper);
+        svg.style.setProperty('--c-trim', sw.dataset.trim);
+        svg.style.setProperty('--c-sole', sw.dataset.sole);
+        svg.style.setProperty('--c-lace', sw.dataset.lace);
+        nameEl.textContent = sw.dataset.name;
+      });
+    });
+  });
+
+  // Size finder: EU ≈ 1.5 × (foot length + 1.5 cm); US men ≈ EU − 33; US women ≈ US men + 1.5
+  (function () {
+    var input = document.getElementById('foot');
+    var out = document.getElementById('foot-out');
+    var eu = document.getElementById('eu');
+    var usm = document.getElementById('usm');
+    var usw = document.getElementById('usw');
+    function half(n) { return Math.round(n * 2) / 2; }
+    function fmt(n) { return String(n % 1 === 0 ? n : n.toFixed(1)); }
+    function update() {
+      var cm = parseFloat(input.value);
+      var e = Math.round(1.5 * (cm + 1.5));
+      var m = half(e - 33);
+      out.textContent = cm.toFixed(1) + ' cm';
+      eu.textContent = e;
+      usm.textContent = fmt(m);
+      usw.textContent = fmt(m + 1.5);
+    }
+    input.addEventListener('input', update);
+    update();
+  })();
+</script>
+</body>
+</html>
